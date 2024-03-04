@@ -14,8 +14,8 @@ import visualize
 def main():
 
 	ke = 200
-	ex = np.zeros(ke)
-	hy = np.zeros(ke)
+	ex = np.zeros(ke, dtype=np.float64)
+	hy = np.zeros(ke, dtype=np.float64)
 
 	Ex, Hy = sources.pulse(ke, ex, hy)
 
