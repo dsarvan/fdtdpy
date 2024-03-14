@@ -7,7 +7,7 @@ import sys
 import numpy as np
 from PyQt6 import QtWidgets
 
-import sources
+import simulation
 import visualize
 
 
@@ -18,8 +18,7 @@ def main():
     ex = np.zeros(ke, dtype=np.float64)
     hy = np.zeros(ke, dtype=np.float64)
 
-    #Ex, Hy = sources.pulse(ke, ex, hy)
-    Ex, Hy = sources.sinusoidal(ke, ex, hy)
+    Ex, Hy = simulation.simulate(ke, ex, hy)
 
     app = QtWidgets.QApplication(sys.argv)
     window = visualize.MainWindow(Ex, Hy)
