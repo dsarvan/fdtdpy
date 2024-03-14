@@ -4,95 +4,35 @@
 import numpy as np
 
 
-def pulse(ke: int, ex: np.ndarray, hy: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+def gaussian(time_step: int, t0: int = 40, spread: float = 12) -> float:
     """
     Gaussian pulse source
 
-    :param int ke: number of electric and magnetic field nodes
-    :param np.ndarray ex: electric field oriented in the x direction
-    :param np.ndarray hy: magnetic field oriented in the y direction
+    :param int time_step: an integer counter that serves as the temporal index
+    :param int t0: time step at which gaussian function is maximum, default 40
+    :param float spread: width of the gaussian pulse, default 12
 
-    :return: Ex, Hy: stack of electric and magnetic field
-    :rtype: tuple[np.ndarray, np.ndarray]
+    :return: gaussian pulse
+    :rtype: float
 
     """
 
-    # pulse parameters
-    kc: int = ke // 2
-    t0: int = 40
-    spread: float = 12
-    nsteps: int = 500
-
-    lbound = [0, 0]
-    hbound = [0, 0]
-
-    Ex = np.empty((0, ex.shape[0]))
-    Hy = np.empty((0, hy.shape[0]))
-
-    # FDTD loop
-    for time_step in range(1, nsteps + 1):
-        # calculate the Ex field
-        ex[1:ke] = ex[1:ke] + 0.5 * (hy[0:ke-1] - hy[1:ke])
-
-        # put a Gaussian pulse in the middle
-        ex[1] = ex[1] + np.exp(-0.5 * ((t0 - time_step) / spread) ** 2)
-
-        # absorbing boundary conditions
-        ex[0], lbound[0], lbound[1] = lbound[0], lbound[1], ex[1]
-        ex[ke-1], hbound[0], hbound[1] = hbound[0], hbound[1], ex[ke-2]
-
-        # calculate the Hy field
-        hy[0:ke-1] = hy[0:ke-1] + 0.5 * (ex[0:ke-1] - ex[1:ke])
-
-        Ex = np.vstack((Ex, ex))
-        Hy = np.vstack((Hy, hy))
-
-    return Ex, Hy
+    return np.exp(-0.5 * ((t0 - time_step) / spread) ** 2)
 
 
-def sinusoidal(
-    ke: int, ex: np.ndarray, hy: np.ndarray
-) -> tuple[np.ndarray, np.ndarray]:
+def sinusoidal(time_step: int, ddx: float = 0.01, freq: float = 700e6) -> float:
     """
     Sinusoidal wave source
 
-    :param int ke: number of electric and magnetic field nodes
-    :param np.ndarray ex: electric field oriented in the x direction
-    :param np.ndarray hy: magnetic field oriented in the y direction
+    :param int time_step: an integer counter that serves as the temporal index
+    :param float ddx: the cell size (m), default 0.01 m
+    :param float freq: frequency of the sinusoidal wave source, default 700 MHz
 
-    :return: Ex, Hy: stack of electric and magnetic field
-    :rtype: tuple[np.ndarray, np.ndarray]
+    :return: sinusoidal wave
+    :rtype: float
 
     """
 
-    # wave parameters
-    ddx: float = 0.01
-    dt: float = ddx / 6e8
-    freq: float = 700e6
-    nsteps: int = 500
+    dt: float = ddx / 6e8  # time step
 
-    lbound = [0, 0]
-    hbound = [0, 0]
-
-    Ex = np.empty((0, ex.shape[0]))
-    Hy = np.empty((0, hy.shape[0]))
-
-    # FDTD loop
-    for time_step in range(1, nsteps + 1):
-        # calculate the Ex field
-        ex[1:ke] = ex[1:ke] + 0.5 * (hy[0:ke-1] - hy[1:ke])
-
-        # put a sinusoidal wave in the middle
-        ex[1] = ex[1] + np.sin(2 * np.pi * freq * dt * time_step)
-
-        # absorbing boundary conditions
-        ex[0], lbound[0], lbound[1] = lbound[0], lbound[1], ex[1]
-        ex[ke-1], hbound[0], hbound[1] = hbound[0], hbound[1], ex[ke-2]
-
-        # calculate the Hy field
-        hy[0:ke-1] = hy[0:ke-1] + 0.5 * (ex[0:ke-1] - ex[1:ke])
-
-        Ex = np.vstack((Ex, ex))
-        Hy = np.vstack((Hy, hy))
-
-    return Ex, Hy
+    return np.sin(2 * np.pi * freq * dt * time_step)
