@@ -1,4 +1,6 @@
 Examples
 ========
 
-.. autofunction:: sources.pulse
+.. autofunction:: sources.gaussian
+.. autofunction:: sources.sinusoidal
+.. autofunction:: simulation.simulate
