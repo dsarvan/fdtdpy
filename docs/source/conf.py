@@ -13,7 +13,7 @@ sys.path.append(os.path.abspath("../../src/fd1d"))
 project = "fdtdpy"
 copyright = "2024, Saravanan Dayalan"
 author = "Saravanan Dayalan"
-release = "0.1"
+release = "0.1.a1"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
