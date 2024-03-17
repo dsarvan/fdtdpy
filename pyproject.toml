@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=69.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fdtdpy"
+version = "0.1.a1"
+authors = [{name="Saravanan Dayalan", email="dayalsaravanan@gmail.com"}]
+description = "Electromagnetic simulation using the FDTD method with Python"
+keywords = ["electromagnetic", "simulation", "fdtd"]
+readme = {file="README", content-type="text/x-rst"}
+requires-python = ">=3.12.0"
+dependencies = [
+    "numpy",
+    "PyQt6",
+    "pyqtgraph",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Physics",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "isort",
+    "line_profiler",
+    "mypy",
+    "pylint",
+    "pytest",
+]
+docs = [
+    "sphinx",
+    "nbsphinx",
+    "furo",
+]
+
+[project.urls]
+Homepage = "https://github.com/dsarvan/fdtdpy"
+Repository = "https://github.com/dsarvan/fdtdpy"
+Issues = "https://github.com/dsarvan/fdtdpy/issues"
