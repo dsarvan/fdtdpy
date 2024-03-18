@@ -1,0 +1,18 @@
+# Read the Docs configuration file for Sphinx projects
+# See https://docs.readthedocs.io/en/stable/config-file/v2.html
+
+version: 0.1.a1
+
+build:
+    os: debian-12
+    tools:
+        python: "3.12"
+
+    # build documentation in the "docs/source/" directory with Sphinx
+    sphinx:
+        builder: html
+        configuration: docs/source/conf.py
+        fail_on_warning: true
+
+        formats:
+            - pdf
