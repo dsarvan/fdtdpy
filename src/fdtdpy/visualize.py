@@ -1,3 +1,5 @@
+""" Visualization """
+
 import numpy as np
 import pyqtgraph as pg  # type: ignore
 from PyQt6 import QtCore, QtWidgets
@@ -28,6 +30,12 @@ class MainWindow(QtWidgets.QMainWindow):
         self.graph_line1 = self.graph_widget.addPlot(row=0, col=0)
         self.graph_line2 = self.graph_widget.addPlot(row=1, col=0)
 
+        # graph_plot method call
+        self.graph_plot(self.Ex, self.Hy)
+
+    def graph_plot(self, Ex: np.ndarray, Hy: np.ndarray) -> None:
+        """Method accepts Ex and Hy parameters to plot"""
+
         # set the axis labels (position and text), style parameters
         styles = {"color": "#dcdcdc", "font-size": "10pt"}
         self.graph_line1.setLabel("left", "E<sub>x</sub>", **styles)
@@ -35,20 +43,19 @@ class MainWindow(QtWidgets.QMainWindow):
         self.graph_line2.setLabel("left", "H<sub>y</sub>", **styles)
         self.graph_line2.setLabel("bottom", "Spatial Step", **styles)
 
-        # graph_plot method call
-        self.graph_plot(self.Ex, self.Hy)
-
-    def graph_plot(self, Ex: np.ndarray, Hy: np.ndarray) -> None:
-        """Method accepts Ex and Hy parameters to plot"""
-
         # set the axis limits within the specified ranges and padding
         self.graph_line1.setXRange(0, Ex.shape[1], padding=0)
-        self.graph_line1.setYRange(-1.2, 1.2, padding=0.1)
-        self.data_line1 = self.graph_line1.plot(pen="#dcdcdc")
-
-        # set the axis limits within the specified ranges and padding
         self.graph_line2.setXRange(0, Hy.shape[1], padding=0)
+        self.graph_line1.setYRange(-1.2, 1.2, padding=0.1)
         self.graph_line2.setYRange(-1.2, 1.2, padding=0.1)
+
+        # set the axis ticks within the specified position and range
+        xticks1 = self.graph_line1.getAxis("bottom")
+        xticks2 = self.graph_line2.getAxis("bottom")
+        xticks1.setTicks([[(n, str(n)) for n in range(0, Ex.shape[1], 20)]])
+        xticks2.setTicks([[(n, str(n)) for n in range(0, Hy.shape[1], 20)]])
+
+        self.data_line1 = self.graph_line1.plot(pen="#dcdcdc")
         self.data_line2 = self.graph_line2.plot(pen="#dcdcdc")
 
         self.timer = QtCore.QTimer()
