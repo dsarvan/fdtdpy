@@ -5,7 +5,7 @@
 import os
 import sys
 
-sys.path.append(os.path.abspath("../../src/fd1d"))
+sys.path.append(os.path.abspath("../../src/fdtdpy"))
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
