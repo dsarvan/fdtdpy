@@ -28,12 +28,12 @@ def simulate(ke: int, ex: np.ndarray, hy: np.ndarray) -> tuple[np.ndarray, np.nd
     Hy = np.empty((0, hy.shape[0]))
 
     # FDTD simulation loop
-    for time_step in range(1, nsteps + 1):
+    for t in range(1, nsteps + 1):
         # calculate the Ex field
         ex[1:ke] = ex[1:ke] + 0.5 * (hy[0:ke-1] - hy[1:ke])
 
         # sinusoidal wave source (frequency 1900 MHz)
-        ex[1] = ex[1] + sources.sinusoidal(time_step, freq=1900e6)
+        ex[1] = ex[1] + sources.sinusoidal(t, freq=1900e6)
 
         # absorbing boundary conditions
         ex[0], lbound[0], lbound[1] = lbound[0], lbound[1], ex[1]
