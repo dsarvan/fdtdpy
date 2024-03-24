@@ -20,6 +20,22 @@ def gaussian(t: int, t0: int = 70, sigma: float = 12) -> float:
     return np.exp(-0.5 * ((t - t0) / sigma) ** 2)
 
 
+def normalized_gaussian(t: int, t0: int = 40, sigma: float = 12) -> float:
+    """
+    Normalized differentiated Gaussian pulse source
+
+    :param int t: an integer counter that serves as the temporal index
+    :param int t0: time step at which gaussian function is maximum, default 40
+    :param float sigma: width of the gaussian pulse, default 12
+
+    :return: normalized differentiated gaussian pulse
+    :rtype: float
+
+    """
+
+    return -(t - t0) / sigma * np.exp(-0.5 * ((t - t0) / sigma) ** 2)
+
+
 def sinusoidal(t: int, ddx: float = 0.01, freq: float = 700e6) -> float:
     """
     Sinusoidal wave source
