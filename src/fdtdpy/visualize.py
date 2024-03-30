@@ -4,6 +4,8 @@ import numpy as np
 import pyqtgraph as pg  # type: ignore
 from PyQt6 import QtCore, QtWidgets
 
+import medium as md
+
 pg.setConfigOptions(antialias=True)
 
 
@@ -33,11 +35,23 @@ class MainWindow(QtWidgets.QMainWindow):
         # graph_plot method call
         self.graph_plot(self.Ex, self.Hy)
 
+
+    def material(self, size: int, epsr: int):
+        """Material medium method"""
+        ca, cb = md.dielectric(size, epsr)
+        medium = (0.5/cb - 1)/3
+        medium[medium==0] = -1.5
+        color = (168,164,149,100)
+        mline = pg.mkPen(color, width=0.75, style=QtCore.Qt.PenStyle.SolidLine)
+        self.graph_line1.plot(medium, fillLevel=-1.5, brush=color, pen=mline)
+        self.graph_line2.plot(medium, fillLevel=-1.5, brush=color, pen=mline)
+
+
     def graph_plot(self, Ex: np.ndarray, Hy: np.ndarray) -> None:
         """Method accepts Ex and Hy parameters to plot"""
 
         # set the axis labels (position and text), style parameters
-        styles = {"color": "#dcdcdc", "font-size": "10pt"}
+        styles = {"color": "#ffffff", "font-size": "10pt"}
         self.graph_line1.setLabel("left", "E<sub>x</sub>", **styles)
         self.graph_line1.setLabel("bottom", " ", **styles)
         self.graph_line2.setLabel("left", "H<sub>y</sub>", **styles)
@@ -55,13 +69,16 @@ class MainWindow(QtWidgets.QMainWindow):
         xticks1.setTicks([[(n, str(n)) for n in range(0, Ex.shape[1], 20)]])
         xticks2.setTicks([[(n, str(n)) for n in range(0, Hy.shape[1], 20)]])
 
-        self.data_line1 = self.graph_line1.plot(pen="#dcdcdc")
-        self.data_line2 = self.graph_line2.plot(pen="#dcdcdc")
+        self.data_line1 = self.graph_line1.plot(pen="#ffffff")
+        self.data_line2 = self.graph_line2.plot(pen="#ffffff")
+
+        self.material(Ex.shape[1], epsr=4)
 
         self.timer = QtCore.QTimer()
         self.timer.setInterval(50)
         self.timer.timeout.connect(self.update_plot)
         self.timer.start()
+
 
     def update_plot(self) -> None:
         """Method uses QTimer to update the data every 50 ms"""
